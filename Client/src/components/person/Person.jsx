@@ -3,8 +3,11 @@ import PersonForm from "./PersonForm";
 import PersonList from "./PersonList";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import axios from "axios";
 
 function Person() {
+  const BASE_URL = import.meta.env.VITE_BASE_API_URL + '/people';
+
   const defaultFormValues = {
     id: 0,
     firstName: "",
@@ -14,33 +17,49 @@ function Person() {
   const methods = useForm({
     defaultValues: defaultFormValues,
   });
-  const [people, setPeople]  = useState([
-    { id: 1, firstName: "Waruni", lastName: "Gunasena" },
-    { id: 2, firstName: "Rumesha", lastName: "Gunasena" },
-    { id: 3, firstName: "Haritha", lastName: "Gunasena" },
-  ]);
 
+  const [people, setPeople] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [editData, setEditData] = useState(null);
+
+  useEffect(() => {
+    try {
+      const loadPeople = async () => {
+        var peopleData = (await axios.get(BASE_URL)).data;
+        console.log("API Response:", peopleData);
+        setPeople(peopleData.result);
+      };
+      loadPeople();
+    } catch (error) {
+      console.log(error);
+      toast.error("Error has occured!");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     methods.reset(editData);
   }, [editData]);
 
-  const handleFormSubmit = (person) => {
+  const handleFormSubmit = async (person) => {
+    setLoading(true);
     try {
       if (person.id <= 0) {
-        setPeople((perviousPerson) => [...perviousPerson, person]);
+        const createdPerson = (await axios.post(BASE_URL, person)).data;
+        setPeople((perviousPerson) => [...perviousPerson, createdPerson]);
       } else {
-        console.log("edit");
-        setPeople((previousPeople) => previousPeople.map( p => p.id === person.id ? person: p));
+        await axios.put(`${BASE_URL}/${person.id}`, person);
+        setPeople((previousPeople) =>
+          previousPeople.map((p) => (p.id === person.id ? person : p))
+        );
       }
       methods.reset(defaultFormValues);
       toast.success("saved successfully!");
     } catch (error) {
       toast.error("Error has occured!");
-    }
-    finally{
-
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -52,18 +71,25 @@ function Person() {
     setEditData(person);
   };
 
-  const handlePersonDelete = (person) => {
+  const handlePersonDelete = async (person) => {
     if (
       !confirm(
         `Are you sure to delete a person : ${person.firstName} ${person.lastName}`
       )
     )
       return;
+      setLoading(true);
     try {
-      setPeople((perviousPerson) => perviousPerson.filter(p => p.id !== person.id));
+      await axios.delete(`${BASE_URL}/${person.id}`);
+      setPeople((perviousPerson) =>
+        perviousPerson.filter((p) => p.id !== person.id)
+      );
       toast.success("deleted successfully!");
     } catch (error) {
       toast.error("Error !");
+    }
+    finally{
+      setLoading(false);
     }
   };
   return (
@@ -73,6 +99,7 @@ function Person() {
           <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
             Person Management
           </h1>
+          {loading && <p>Loading...</p>}
         </div>
 
         <PersonForm
