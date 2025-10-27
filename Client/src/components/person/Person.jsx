@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 
 function Person() {
-  const BASE_URL = import.meta.env.VITE_BASE_API_URL + '/people';
+  const BASE_URL = import.meta.env.VITE_BASE_API_URL + "/people";
 
   const defaultFormValues = {
     id: 0,
@@ -26,12 +26,10 @@ function Person() {
     try {
       const loadPeople = async () => {
         var peopleData = (await axios.get(BASE_URL)).data;
-        console.log("API Response:", peopleData);
         setPeople(peopleData.result);
       };
       loadPeople();
     } catch (error) {
-      console.log(error);
       toast.error("Error has occured!");
     } finally {
       setLoading(false);
@@ -78,7 +76,7 @@ function Person() {
       )
     )
       return;
-      setLoading(true);
+    setLoading(true);
     try {
       await axios.delete(`${BASE_URL}/${person.id}`);
       setPeople((perviousPerson) =>
@@ -87,8 +85,7 @@ function Person() {
       toast.success("deleted successfully!");
     } catch (error) {
       toast.error("Error !");
-    }
-    finally{
+    } finally {
       setLoading(false);
     }
   };
