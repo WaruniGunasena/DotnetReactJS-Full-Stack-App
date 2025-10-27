@@ -1,6 +1,14 @@
 import { Edit, Trash2 } from "lucide-react";
 
-const PersonList = ({ peopleList }) => {
+const PersonList = ({ peopleList, onPersonEdit, onPersonDelete }) => {
+  if (!peopleList || peopleList.length === 0) {
+    return (
+      <div className="text-center py-8 text-gray-500">
+        <p className="text-lg font-medium">No people found</p>
+        <p className="text-sm">Add some people using the form above.</p>
+      </div>
+    );
+  }
   return (
     <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
       <div className="overflow-x-auto">
@@ -34,6 +42,7 @@ const PersonList = ({ peopleList }) => {
                 <td className="px-6 py-4 text-center">
                   <div className="flex items-center justify-center space-x-2">
                     <button
+                      onClick={() => onPersonEdit(person)}
                       className="inline-flex items-center px-3 py-2 bg-blue-100 text-blue-700 text-sm font-medium rounded-lg hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-all duration-200 transform hover:scale-105"
                       title="Edit person"
                     >
@@ -41,6 +50,7 @@ const PersonList = ({ peopleList }) => {
                       Edit
                     </button>
                     <button
+                      onClick={() => onPersonDelete(person)}
                       className="inline-flex items-center px-3 py-2 bg-red-100 text-red-700 text-sm font-medium rounded-lg hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 transition-all duration-200 transform hover:scale-105"
                       title="Delete person"
                     >
@@ -53,13 +63,6 @@ const PersonList = ({ peopleList }) => {
             ))}
           </tbody>
         </table>
-
-        {PersonList.length<1 && 
-        <div className="text-center py-8 text-gray-500">
-          <p className="text-lg font-medium">No people found</p>
-          <p className="text-sm">Add some people using the form above.</p>
-        </div>
-        }
       </div>
     </div>
   );
