@@ -68,11 +68,12 @@ DotnetReactJS-Full-Stack-App/
 ````
 ## Application Preview
 
-![App Screenshot](./screenshots/app_screenshot.png)
+![App Screenshot](Client/src/assets/screenshot1.png)
+![App Screenshot](Client/src/assets/screenshot2.png)
 
 ---
 
-## ⚙️ Prerequisites
+## Prerequisites
 
 Before running the project locally, make sure you have installed:
 
@@ -82,67 +83,50 @@ Before running the project locally, make sure you have installed:
 
 ---
 
-## ✅ Local setup — Backend
+## Local setup — Backend
 
 1. Open a terminal and go to the `Backend` folder:
    ```bash
    cd Backend
-````
-
+   ````
 2. Restore and build the project:
-
    ```bash
    dotnet restore
    dotnet build
    ```
-
 3. Configure database settings:
-
    * Open `appsettings.json` in the `Backend` project and update the connection string and other settings (if any).
-
    * If the project uses EF Core migrations, run:
-
      ```bash
      dotnet ef database update
      ```
-
    > If you don’t use EF Core migrations, start the database manually and ensure the connection string is correct.
 
 4. Run the backend API:
-
    ```bash
    dotnet run
    ```
-
    The API typically runs on `https://localhost:5001` or `http://localhost:5000` (check the console to confirm the actual URL).
-
 ---
 
-## ✅ Local setup — Frontend (React)
+## Local setup — Frontend (React)
 
 1. Open a terminal and go to the `Client` folder:
-
    ```bash
    cd Client
    ```
-
 2. Install dependencies:
-
    ```bash
    npm install
    ```
-
 3. Start the development server:
-
    ```bash
    npm start
    ```
-
    The app will usually open at `http://localhost:3000`. Ensure the frontend API base URL points to your backend URL (check `.env` or API config in `src`).
-
 ---
 
-## 🔌 Configure Frontend ↔ Backend Communication
+## Configure Frontend ↔ Backend Communication
 
 * Find where the frontend calls the backend (often an `api.js`, `services/`, or in component `axios` calls).
 * Update the base URL to match the running backend (e.g., `https://localhost:5001/api`).
@@ -156,10 +140,9 @@ export default axios.create({
   baseURL: "https://localhost:5001/api" // update if needed
 });
 ```
-
 ---
 
-## 🧪 Testing the API
+## Testing the API
 
 Use Postman or curl to test endpoints directly:
 
@@ -169,35 +152,17 @@ POST https://localhost:5001/api/yourcontroller
 PUT  https://localhost:5001/api/yourcontroller/{id}
 DELETE https://localhost:5001/api/yourcontroller/{id}
 ```
-
 ---
 
-## 🧾 Notes & To-Do (Please verify)
+## Notes & To-Do (Please verify)
 
 * **Database type:** I couldn’t determine the exact DB from the repo browsing. If you use **MySQL**, **SQL Server**, or **SQLite**, add clear instructions (connection string example) in `Backend/README` or `appsettings.json`.
 * **Environment files:** If frontend uses `.env`, include a sample `.env.example` showing `REACT_APP_API_BASE_URL=http://localhost:5000/api`.
 * **Migrations:** If you use EF Core migrations, include the generated `Migrations/` folder and migration commands in this README.
-
 ---
 
-## 👩‍💻 Author
+## Author
 
 **Waruni Gunasena**
 Full Stack Developer (ASP.NET Core + React)
 
----
-
-## 📄 License
-
-This project is licensed under the [MIT License](LICENSE) — or change to whichever license you prefer.
-
-```
-
----
-
-Would you like me to:
-1. Add the exact database instructions (connection string and migration commands) if you tell me which DB you used?  
-2. Add a short `.env.example` and a `launch`/`start` script for both `Backend` and `Client`?  
-3. Or I can fetch specific files (like `appsettings.json`, `.csproj`, or `package.json`) from your repo and auto-generate a perfectly accurate README with exact ports, .NET target, and dependencies — I can do that now if you want.
-::contentReference[oaicite:0]{index=0}
-```
